@@ -165,8 +165,8 @@ const ReadDocuments = (app: ProtectedApp) => {
         {
             tags: ["Database"],
             detail: {
-                description: "Get the collection list",
-                summary: "Get collection list",
+                description: "Get the collection list data",
+                summary: "Get collection list data",
             },
         }
     );
