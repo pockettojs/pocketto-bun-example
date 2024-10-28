@@ -9,6 +9,15 @@ const UserCompanySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+}, {
+    toJSON: {
+        virtuals: true,
+        versionKey: false,
+        transform: (doc, ret) => {
+            ret.id = ret._id;
+            delete ret._id;
+        }
+    },
 });
 
 export default mongoose.model('UserCompany', UserCompanySchema, 'user_company');

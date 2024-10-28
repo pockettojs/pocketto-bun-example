@@ -21,6 +21,15 @@ const CompanySchema = new mongoose.Schema({
     logo: {
         type: String,
     },
+}, {
+    toJSON: {
+        virtuals: true,
+        versionKey: false,
+        transform: (doc, ret) => {
+            ret.id = ret._id;
+            delete ret._id;
+        }
+    },
 });
 
 export default mongoose.model('Company', CompanySchema, 'compapa');

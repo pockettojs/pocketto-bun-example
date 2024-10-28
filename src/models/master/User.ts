@@ -28,6 +28,15 @@ const UserSchema = new mongoose.Schema({
             return bcrypt.compareSync(password, this.password);
         },
     },
+    toJSON: {
+        virtuals: true,
+        versionKey: false,
+        transform: (doc, ret) => {
+            ret.id = ret._id;
+            delete ret._id;
+            delete ret.password;
+        }
+    },
 });
 
 export default mongoose.model('User', UserSchema);
