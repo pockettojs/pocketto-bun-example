@@ -13,7 +13,7 @@ const UserCompanySchema = new mongoose.Schema({
     toJSON: {
         virtuals: true,
         versionKey: false,
-        transform: (doc, ret) => {
+        transform: (_, ret) => {
             ret.id = ret._id;
             delete ret._id;
         }

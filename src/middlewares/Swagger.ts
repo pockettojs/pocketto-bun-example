@@ -38,6 +38,14 @@ const Swagger = (app: Elysia) => {
                     name: 'User',
                     description: 'User related API',
                 },
+                {
+                    name: 'Company',
+                    description: 'Company related API',
+                },
+                {
+                    name: 'Database',
+                    description: 'Database related API',
+                },
             ],
         },
         autoDarkMode: true,

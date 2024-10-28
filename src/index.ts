@@ -6,6 +6,7 @@ import UserModule, { Create as CreateUser } from "./modules/UserModule";
 import AuthModule from "./modules/AuthModule";
 import CompanyModule from "./modules/CompanyModule";
 import AuthExtractor from "./middlewares/AuthExtractor";
+import DatabaseModule from "./modules/DatabaseModule";
 
 const app = new Elysia()
     .use(Swagger)
@@ -53,9 +54,16 @@ app.guard({
             .use(UserModule.Update)
         )
         .group("/companies", (group) => group
+            .use(CompanyModule.List)
             .use(CompanyModule.Read)
+            .use(CompanyModule.Create)
         )
-        .group("/databases", (group) => group)
+        .group("/databases", (group) => group
+            .use(DatabaseModule.List)
+            .use(DatabaseModule.Read)
+            .use(DatabaseModule.Create)
+            .use(DatabaseModule.ReadDocuments)
+        )
 })
 
 

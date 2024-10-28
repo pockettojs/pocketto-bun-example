@@ -2,6 +2,7 @@ import { t } from "elysia";
 import { App, ProtectedApp } from "..";
 import { connectMasterDb } from "../utils/database";
 import User from "../models/master/User";
+import { faker } from "@faker-js/faker";
 
 const Read = (app: ProtectedApp) => {
     return app.get(
@@ -49,9 +50,9 @@ export const Create = (app: App) => {
                 summary: "Create user",
             },
             body: t.Object({
-                name: t.String(),
-                email: t.String(),
-                password: t.String(),
+                name: t.String({ examples: [faker.person.fullName()] }),
+                email: t.String({ examples: [faker.internet.email()] }),
+                password: t.String({ examples: [faker.internet.password()] }),
             }),
         },
     );
@@ -79,8 +80,8 @@ const Update = (app: ProtectedApp) => {
                 summary: "Update user",
             },
             body: t.Object({
-                name: t.Optional(t.String()),
-                email: t.Optional(t.String()),
+                name: t.Optional(t.String({ examples: [faker.person.fullName()] })),
+                email: t.Optional(t.String({ examples: [faker.internet.email()] })),
             }),
         },
     );
