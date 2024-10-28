@@ -3,7 +3,7 @@ import { App, ProtectedApp } from "..";
 import { connectMasterDb } from "../utils/database";
 import User from "../models/master/User";
 
-export const Read = (app: ProtectedApp) => {
+const Read = (app: ProtectedApp) => {
     return app.get(
         "/",
         async ({ userId }) => {
@@ -57,7 +57,7 @@ export const Create = (app: App) => {
     );
 }
 
-export const Update = (app: ProtectedApp) => {
+const Update = (app: ProtectedApp) => {
     return app.put(
         "/",
         async ({ userId, body }) => {
@@ -85,3 +85,8 @@ export const Update = (app: ProtectedApp) => {
         },
     );
 }
+
+export default {
+    Read,
+    Update,
+};

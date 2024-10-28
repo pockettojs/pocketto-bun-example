@@ -3,7 +3,7 @@ import { App } from "..";
 import { connectMasterDb } from "../utils/database";
 import User from "../models/master/User";
 
-export function Login(app: App) {
+function Login(app: App) {
     return app.post(
         "/login",
         async ({ jwt, body, set }) => {
@@ -34,3 +34,6 @@ export function Login(app: App) {
     );
 }
 
+export default {
+    Login,
+};

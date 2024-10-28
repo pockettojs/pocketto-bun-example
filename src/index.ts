@@ -2,8 +2,9 @@ import { Elysia } from "elysia";
 import Swagger from "./middlewares/Swagger";
 import jwt from "@elysiajs/jwt";
 import bearer from "@elysiajs/bearer";
-import * as UserModule from "./modules/UserModule";
-import * as AuthModule from "./modules/AuthModule";
+import UserModule, { Create as CreateUser } from "./modules/UserModule";
+import AuthModule from "./modules/AuthModule";
+import CompanyModule from "./modules/CompanyModule";
 import AuthExtractor from "./middlewares/AuthExtractor";
 
 const app = new Elysia()
@@ -23,14 +24,13 @@ const protectedApp = app
             summary: "Heartbeat",
         },
     })
-    .group("/users", (group) => group.use(UserModule.Create))
+    .group("/users", (group) => group.use(CreateUser))
     .use(AuthModule.Login)
     .use(AuthExtractor);
 export type ProtectedApp = typeof protectedApp;
 
 app.guard({
     beforeHandle: async ({ jwt, bearer, set }) => {
-        console.log('here?');
         try {
             if (!bearer) {
                 set.status = 401;
@@ -52,7 +52,9 @@ app.guard({
             .use(UserModule.Read)
             .use(UserModule.Update)
         )
-        .group("/companies", (group) => group)
+        .group("/companies", (group) => group
+            .use(CompanyModule.Read)
+        )
         .group("/databases", (group) => group)
 })
 
