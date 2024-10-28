@@ -158,17 +158,183 @@ const ReadDocuments = (app: ProtectedApp) => {
             const databaseName = database.name;
             const result = await (new DestinationModel()).getClass().via(databaseName).get();
             return {
-                message: "Collection data retrieved successfully",
+                message: "Collection list retrieved successfully",
                 data: result,
             };
         },
         {
             tags: ["Database"],
             detail: {
-                description: "Get the collection data",
-                summary: "Get collection data",
+                description: "Get the collection list",
+                summary: "Get collection list",
             },
         }
+    );
+}
+
+const ReadDocument = (app: ProtectedApp) => {
+    return app.get(
+        "/:databaseId/collections/:collectionName/documents/:documentId",
+        async ({ set, userId, params: { databaseId, collectionName, documentId } }) => {
+            await connectMasterDb();
+            const database = await Database.findOne({ _id: databaseId });
+            if (!database) {
+                set.status = 404;
+                return {
+                    message: "Database not found",
+                };
+            }
+
+            const invalidAccess = await Database.checkDatabaseAccess(databaseId, userId, set);
+            if (invalidAccess) {
+                return invalidAccess;
+            }
+
+            const collectionMapper = {
+                [SalesInvoice.collectionName]: SalesInvoice,
+                [Guide.collectionName]: Guide,
+            } as { [key: string]: ModelStatic<Model> };
+
+            if (!collectionMapper[collectionName]) {
+                set.status = 404;
+                return {
+                    message: "Collection not found",
+                };
+            }
+
+            await database.connect();
+            const DestinationModel = collectionMapper[collectionName];
+            const databaseName = database.name;
+            const result = await (new DestinationModel()).getClass().via(databaseName).find(documentId);
+            if (!result) {
+                set.status = 404;
+                return {
+                    message: "Document not found",
+                };
+            }
+            return {
+                message: "Document retrieved successfully",
+                data: result,
+            };
+        },
+        {
+            tags: ["Database"],
+            detail: {
+                description: "Get the document data",
+                summary: "Get document data",
+            },
+        }
+    );
+}
+
+const CreateDocument = (app: ProtectedApp) => {
+    return app.post(
+        "/:databaseId/collections/:collectionName/documents",
+        async ({ set, userId, params: { databaseId, collectionName }, body }) => {
+            await connectMasterDb();
+            const database = await Database.findOne({ _id: databaseId });
+            if (!database) {
+                set.status = 404;
+                return {
+                    message: "Database not found",
+                };
+            }
+
+            const invalidAccess = await Database.checkDatabaseAccess(databaseId, userId, set);
+            if (invalidAccess) {
+                return invalidAccess;
+            }
+
+            const collectionMapper = {
+                [SalesInvoice.collectionName]: SalesInvoice,
+                [Guide.collectionName]: Guide,
+            } as { [key: string]: ModelStatic<Model> };
+
+            if (!collectionMapper[collectionName]) {
+                set.status = 404;
+                return {
+                    message: "Collection not found",
+                };
+            }
+
+            await database.connect();
+            const DestinationModel = collectionMapper[collectionName];
+            const databaseName = database.name;
+            const createResult = await (new DestinationModel()).getClass().via(databaseName).create(body);
+            const result = await (new DestinationModel()).getClass().via(databaseName).find(createResult._id);
+            return {
+                message: "Document created successfully",
+                data: result,
+            };
+        },
+        {
+            tags: ["Database"],
+            detail: {
+                description: "Create a document",
+                summary: "Create document",
+            },
+            body: t.Object({}),
+        },
+    );
+}
+
+const UpdateDocument = (app: ProtectedApp) => {
+    return app.put(
+        "/:databaseId/collections/:collectionName/documents/:documentId",
+        async ({ set, userId, params: { databaseId, collectionName, documentId }, body }) => {
+            await connectMasterDb();
+            const database = await Database.findOne({ _id: databaseId });
+            if (!database) {
+                set.status = 404;
+                return {
+                    message: "Database not found",
+                };
+            }
+
+            const invalidAccess = await Database.checkDatabaseAccess(databaseId, userId, set);
+            if (invalidAccess) {
+                return invalidAccess;
+            }
+
+            const collectionMapper = {
+                [SalesInvoice.collectionName]: SalesInvoice,
+                [Guide.collectionName]: Guide,
+            } as { [key: string]: ModelStatic<Model> };
+
+            if (!collectionMapper[collectionName]) {
+                set.status = 404;
+                return {
+                    message: "Collection not found",
+                };
+            }
+
+            await database.connect();
+            const DestinationModel = collectionMapper[collectionName];
+            const databaseName = database.name;
+            const result = await (new DestinationModel()).getClass().via(databaseName).find(documentId);
+            if (!result) {
+                set.status = 404;
+                return {
+                    message: "Document not found",
+                };
+            }
+            console.log('body: ', body);
+            result.fill(body);
+            result.getClass().dbName = databaseName;
+            await result.save();
+            return {
+                message: "Document updated successfully",
+                data: result,
+            };
+        },
+        {
+            tags: ["Database"],
+            detail: {
+                description: "Update a document",
+                summary: "Update document",
+            },
+            body: t.Object({}),
+        },
     );
 }
 
@@ -177,4 +343,7 @@ export default {
     Read,
     Create,
     ReadDocuments,
+    ReadDocument,
+    CreateDocument,
+    UpdateDocument,
 };

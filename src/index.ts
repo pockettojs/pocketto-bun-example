@@ -63,6 +63,9 @@ app.guard({
             .use(DatabaseModule.Read)
             .use(DatabaseModule.Create)
             .use(DatabaseModule.ReadDocuments)
+            .use(DatabaseModule.ReadDocument)
+            .use(DatabaseModule.CreateDocument)
+            .use(DatabaseModule.UpdateDocument)
         )
 })
 
