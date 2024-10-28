@@ -318,7 +318,6 @@ const UpdateDocument = (app: ProtectedApp) => {
                     message: "Document not found",
                 };
             }
-            console.log('body: ', body);
             result.fill(body);
             result.getClass().dbName = databaseName;
             await result.save();
