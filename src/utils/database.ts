@@ -7,6 +7,7 @@ export async function connectSlaveDb(database: Database) {
     const url = `${database.protocol}://${database.host}:${database.port}/${database.database}`;
     const db = await DatabaseManager.connect(url, {
         dbName: database.name,
+        silentConnect: true,
         auth: {
             username: database.username,
             password: database.password,
