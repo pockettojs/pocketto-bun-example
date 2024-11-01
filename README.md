@@ -2,7 +2,7 @@
 
 ## Prerequisite
 
-Install [Bun](https://bun.sh/docs/installation) 
+Install [Bun](https://bun.sh/docs/installation)
 
 ## Getting Started
 
@@ -26,7 +26,13 @@ Rename `.env.sample` to `.env`
 To start the development server run:
 
 ```bash
-bun run dev
+bun dev
 ```
 
 Open <http://localhost:3000/> with your browser to see the result.
+
+## Documentations
+
+- [Elysia Documentation](https://elysia.dev/docs)
+
+Open <http://localhost:3000/docs> with your browser to see the documentation.
