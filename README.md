@@ -2,7 +2,7 @@
 
 ## Prerequisite
 
-Install [Bun](https://bun.sh/docs/installation) 
+Install [Bun](https://bun.sh/docs/installation)
 
 ## Getting Started
 
@@ -34,7 +34,5 @@ Open <http://localhost:3000/> with your browser to see the result.
 ## Documentations
 
 - [Elysia Documentation](https://elysia.dev/docs)
-
-You can open the documentation with following url:
 
 Open <http://localhost:3000/docs> with your browser to see the documentation.
