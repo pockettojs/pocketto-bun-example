@@ -15,9 +15,8 @@ const app = new Elysia()
         secret: Bun.env.JWT_SECRET!,
     }))
     .use(bearer());
-export type App = typeof app;
 
-const protectedApp = app
+app
     .get("/", () => 'OK', {
         tags: ["Health"],
         detail: {
@@ -28,6 +27,9 @@ const protectedApp = app
     .group("/users", (group) => group.use(CreateUser))
     .use(AuthModule.Login)
     .use(AuthExtractor);
+
+export type App = typeof app;
+const protectedApp = app.use(AuthExtractor)
 export type ProtectedApp = typeof protectedApp;
 
 app.guard({
