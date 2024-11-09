@@ -88,7 +88,8 @@ const DatabaseSchema = new mongoose.Schema({
                 password: Bun.env.COUCHDB_PASSWORD as string,
             };
             await initiateCouchDB(host, auth);
-            await createUser(host, this.username, this.password, auth);
+            const url = `${this.protocol}://${this.host}:${this.port}`;
+            await createUser(url, this.username, this.password, auth);
         },
         async connect() {
             return connectSlaveDb(this.toJSON() as Database);
