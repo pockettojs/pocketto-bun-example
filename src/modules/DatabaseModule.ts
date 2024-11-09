@@ -92,14 +92,7 @@ const Create = (app: ProtectedApp) => {
             database.encryptionPassword = body.encryptionPassword || "";
             await database.save();
 
-            const host = Bun.env.COUCHDB_HOST as string;
-            const auth = {
-                username: Bun.env.COUCHDB_USERNAME as string,
-                password: Bun.env.COUCHDB_PASSWORD as string,
-            };
-            await initiateCouchDB(host, auth);
-            const url = `${database.protocol}://${database.host}:${database.port}`;
-            await createUser(url, database.username, database.password, auth);
+            await database.createUserAndDatabase();
             await new Promise((resolve) => setTimeout(resolve, 50));
 
             return {
