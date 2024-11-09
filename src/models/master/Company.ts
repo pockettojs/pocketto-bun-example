@@ -45,4 +45,4 @@ const CompanySchema = new mongoose.Schema({
     },
 });
 
-export default mongoose.model('Company', CompanySchema, 'compapa');
+export default mongoose.model('Company', CompanySchema);
